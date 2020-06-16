@@ -5,8 +5,10 @@ from sqlalchemy import Column, String, Integer, Boolean
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-database_name = 'okr_test_local'
-database_path = "postgresql://{}/{}".format('localhost:5432', database_name)
+# database_name = 'okr_test_local'
+# database_path = "postgresql://{}/{}".format('localhost:5432', database_name)
+
+database_path = os.environ['DATABASE_URL']
 
 db = SQLAlchemy()
 

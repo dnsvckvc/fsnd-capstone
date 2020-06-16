@@ -5,6 +5,7 @@ from models import setup_db, Person, Objective, Requirement
 app = Flask(__name__)
 setup_db(app)
 
+# create users
 
 user1 = Person('Mustermann', 'Max')
 user1.insert()
@@ -15,6 +16,7 @@ user2.insert()
 user3 = Person('Mendez', 'Maria', True)
 user3.insert()
 
+# create objectives
 
 objective11 = Objective('Be a good husband', user1.id)
 objective12 = Objective('Be a good employee', user1.id)
@@ -27,6 +29,7 @@ objective21.insert()
 objective31 = Objective('Be a good boss', user3.id)
 objective31.insert()
 
+# create requirements
 
 requirement111 = Requirement('Take out trash', objective11.id)
 requirement112 = Requirement('Buy flowers', objective11.id)
@@ -35,8 +38,6 @@ requirement111.insert()
 requirement112.insert()
 requirement113.insert()
 
-
-
 requirement121 = Requirement('Go to work', objective12.id)
 requirement122 = Requirement('Finish presentation', objective12.id)
 requirement123 = Requirement('Go to work', objective12.id)
@@ -44,13 +45,10 @@ requirement121.insert()
 requirement122.insert()
 requirement123.insert()
 
-
-
 requirement211 = Requirement('Make money each day', objective21.id)
 requirement212 = Requirement('Do not blow up', objective21.id)
 requirement211.insert()
 requirement212.insert()
-
 
 requirement311 = Requirement('Keep company alive', objective31.id)
 requirement312 = Requirement('Be nice to employees', objective31.id)

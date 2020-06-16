@@ -5,6 +5,7 @@ from auth.auth import AuthError, requires_auth
 
 ITEMS_PER_PAGE = 5
 
+
 def paginate_items(request, selection):
     """
     This function takes the request with a list of items,
@@ -19,6 +20,7 @@ def paginate_items(request, selection):
     current_items = items[start:end]
 
     return current_items
+
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -37,7 +39,7 @@ def create_app(test_config=None):
 
         if len(current_persons) == 0:
             abort(404)
-        
+
         return jsonify({
             'success': True,
             'persons': current_persons
@@ -56,7 +58,7 @@ def create_app(test_config=None):
 
         if len(current_objectives) == 0:
             abort(404)
-        
+
         return jsonify({
             'success': True,
             'objectives': current_objectives
@@ -70,18 +72,21 @@ def create_app(test_config=None):
         requirements of a specific objective at the company.
         Requires basic permissions
         """
-        selection = Requirement.query.filter(Requirement.objective == objective_id).order_by(Requirement.id).all()
+        selection = Requirement.query.filter(
+            Requirement.objective == objective_id).order_by(
+                Requirement.id).all()
+
         all_requirements = [item.format() for item in selection]
 
         if len(all_requirements) == 0:
             abort(404)
-        
+
         return jsonify({
             'success': True,
             'requirements': all_requirements
         })
 
-    @app.route('/objectives/<int:objective_id>', methods =['DELETE'])
+    @app.route('/objectives/<int:objective_id>', methods=['DELETE'])
     @requires_auth('delete:objectives')
     def delete_objective(payload, objective_id):
         """
@@ -89,7 +94,8 @@ def create_app(test_config=None):
         objective and all requirements part of it
         Requires more than basic permissions
         """
-        objective = Objective.query.filter(Objective.id == objective_id).one_or_none()
+        objective = Objective.query.filter(
+            Objective.id == objective_id).one_or_none()
 
         if objective is None:
             abort(404)
@@ -102,7 +108,7 @@ def create_app(test_config=None):
             'deleted_id': deleted_id
         })
 
-    @app.route('/requirements/<int:requirement_id>', methods =['DELETE'])
+    @app.route('/requirements/<int:requirement_id>', methods=['DELETE'])
     @requires_auth('delete:requirements')
     def delete_requirement(payload, requirement_id):
         """
@@ -110,7 +116,8 @@ def create_app(test_config=None):
         requirement
         Requires more than basic permissions
         """
-        requirement = Requirement.query.filter(Requirement.id == requirement_id).one_or_none()
+        requirement = Requirement.query.filter(
+            Requirement.id == requirement_id).one_or_none()
 
         if requirement is None:
             abort(404)
@@ -123,7 +130,7 @@ def create_app(test_config=None):
             'deleted_id': deleted_id
         })
 
-    @app.route('/requirements/<int:requirement_id>', methods = ['PATCH'])
+    @app.route('/requirements/<int:requirement_id>', methods=['PATCH'])
     @requires_auth('patch:requirements')
     def update_requirement(payload, requirement_id):
         """
@@ -136,11 +143,12 @@ def create_app(test_config=None):
 
             assert requirement_id == body.get('requirement_id', None)
 
-            requirement = Requirement.query.filter(Requirement.id == requirement_id).one_or_none()
+            requirement = Requirement.query.filter(
+                Requirement.id == requirement_id).one_or_none()
 
             if requirement is None:
                 abort(404)
-            
+
             assert requirement.objective == body.get('objective_id', None)
 
             previous_status = requirement.is_met
@@ -152,7 +160,6 @@ def create_app(test_config=None):
             else:
                 updated = False
 
-
             return jsonify({
                 'success': True,
                 'previous_status': previous_status,
@@ -162,8 +169,7 @@ def create_app(test_config=None):
         except:
             abort(422)
 
-
-    @app.route('/objectives/<int:objective_id>/requirements', methods = ['POST'])
+    @app.route('/objectives/<int:objective_id>/requirements', methods=['POST'])
     @requires_auth('post:requirements')
     def new_requirement(payload, objective_id):
         """
@@ -174,11 +180,12 @@ def create_app(test_config=None):
         try:
             body = request.get_json()
 
-            objective = Objective.query.filter(Objective.id == objective_id).one_or_none()
+            objective = Objective.query.filter(
+                Objective.id == objective_id).one_or_none()
 
             if objective is None:
                 abort(404)
-            
+
             requirement = Requirement(body.get('description'), objective.id)
             requirement.insert()
 
@@ -190,7 +197,7 @@ def create_app(test_config=None):
         except:
             abort(422)
 
-    @app.route('/objectives', methods = ['POST'])
+    @app.route('/objectives', methods=['POST'])
     @requires_auth('post:objectives')
     def new_objective(payload):
         """
@@ -202,16 +209,11 @@ def create_app(test_config=None):
             body = request.get_json()
 
             objective = Objective(body.get('objective'),
-                                body.get('person'))
+                                  body.get('person'))
             objective.insert()
 
-            # for item in body.get('requirements'):
-            #     requirement = Requirement(item.get('description'),
-            #                               objective.id)
-            #     requirement.insert()
-
             requirement = Requirement(body.get('requirements'),
-                                    objective.id)
+                                      objective.id)
             requirement.insert()
 
             return jsonify({'success': True,
@@ -219,7 +221,6 @@ def create_app(test_config=None):
                             'n_requirements': len(body.get('requirements'))})
         except:
             abort(422)
-
 
     @app.errorhandler(404)
     def resource_not_found(error):
@@ -231,7 +232,6 @@ def create_app(test_config=None):
             'error': 404,
             'message': 'resource not found'
         }), 404
-    
 
     @app.errorhandler(422)
     def request_body_malformed(error):
@@ -243,7 +243,6 @@ def create_app(test_config=None):
             'error': 422,
             'message': 'request body malformed'
         }), 422
-
 
     @app.errorhandler(AuthError)
     def handle_auth_error(error):

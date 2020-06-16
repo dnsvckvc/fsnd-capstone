@@ -17,7 +17,7 @@ cryptography==2.4.2
 decorator==4.4.2
 defusedxml==0.6.0
 dominate==2.3.5
-ecdsa==0.13.2
+ecdsa==0.13.3
 entrypoints==0.3
 Flask==1.0.2
 Flask-Bootstrap==3.3.7.1

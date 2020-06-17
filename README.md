@@ -204,7 +204,7 @@ Errors are returned as JSON objects in the following format
 }
 ```
 
-#### POST '/objectives/1/requirements'
+#### POST '/objectives/<int:objective_id>/requirements'
 - General
     - allows to create new question or search existing ones depending on request body
     - Request arguments: json body
@@ -217,7 +217,7 @@ Errors are returned as JSON objects in the following format
 }
 ```
 
-#### PATCH '/objectives/1/requirements'
+#### PATCH '/objectives/<int:objective_id>/requirements'
 - General
     - allows to update the status of a requirement depending on whether it is met or not
     - Request arguments: json body

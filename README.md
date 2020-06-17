@@ -1,4 +1,6 @@
-# Full Stack Trivia API Backend
+# OKR API Backend
+
+So this code implements a simple OKR (Objectives Key Requirements) system. A set of people working at the company (persons) have assigned objectives which each consist of requirements. A boss can change (post, delete) objectives and requirements. Regular employees can only update a requirement (patch) and thereby change it's "is met" flag to True (and also back to False). Both employees and bosses can get persons, objectives and requirements from an individual objective. Persons cannot be deleted, you work there for eternity :). People from outside with no Bearer tokens cannot see any of the data (no get requests possible).
 
 ## Getting Started
 

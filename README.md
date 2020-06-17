@@ -29,9 +29,12 @@ This will install all of the required packages we selected within the `requireme
 - [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py. 
 
 ## Database Setup
-With Postgres running, restore a database using my custom python script. From the backend folder in terminal run:
+With Postgres running, restore a database using my custom python script. From the folder in terminal run:
 ```bash
-sdfds
+dropdb okr_test_local
+createdb okr_test_local
+flask db upgrade
+python create_dummy_data.py
 ```
 
 ## Running the server
@@ -65,6 +68,7 @@ Setting the `FLASK_APP` variable to `okr` directs flask to use the `okr` directo
 
 ### Getting Started
 - Base URL: can only be run locally and is at `http://127.0.0.1:5000/`.
+- Alternatively you can use my deployment `https://dnsvckvc-fsnd-okr.herokuapp.com/`
 - Authentication: all endpoints require JWT Bearer toeksn with RBAC
 
 ### Error Handling
@@ -195,7 +199,7 @@ Errors are returned as JSON objects in the following format
 - General
     - allows to create new question or search existing ones depending on request body
     - Request arguments: json body
-- Sample 1: `curl --header "Content-Type: application/json" --header "Authorization: Bearer <ACCESS_TOKEN>" -d '{'person': 1, 'objective': 'Do test driven development', 'requirements': 'Implement one test'}' -X POST http://127.0.0.1:5000/questions`
+- Sample 1: `curl --header "Content-Type: application/json" --header "Authorization: Bearer <ACCESS_TOKEN>" -d '{'person': 1, 'objective': 'Do test driven development', 'requirements': 'Implement one test'}' -X POST http://127.0.0.1:5000/objectives`
 ```
 {
   "n_requirements": 18,
@@ -217,7 +221,7 @@ Errors are returned as JSON objects in the following format
 }
 ```
 
-#### PATCH '/objectives/<int:objective_id>/requirements'
+#### PATCH '/requirements/<int:requirement_id>'
 - General
     - allows to update the status of a requirement depending on whether it is met or not
     - Request arguments: json body

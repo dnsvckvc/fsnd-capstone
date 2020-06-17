@@ -84,47 +84,176 @@ Errors are returned as JSON objects in the following format
 - General
     - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
     - Request Arguments: None
+    - Pagination possible
     - Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
 - Sample: `curl http://127.0.0.1:5000/persons`
 
 ```
-
+{
+  "persons": [
+    {
+      "first_name": "Max",
+      "id": 1,
+      "is_boss": false,
+      "name": "Mustermann"
+    },
+    {
+      "first_name": "Ali",
+      "id": 2,
+      "is_boss": false,
+      "name": "Li"
+    },
+    {
+      "first_name": "Maria",
+      "id": 3,
+      "is_boss": true,
+      "name": "Mendez"
+    }
+  ],
+  "success": true
+}
 ```
 
 #### GET '/objectives'
 - General
     - Returns all objectives
-    - Request arguments: category ID in request URL
+    - Pagination possible
+    - Request arguments: None
 - Sample: `curl http://127.0.0.1:5000/objectives`
 ```
-
+{
+  "objectives": [
+    {
+      "complete_name": "Mustermann, Max",
+      "description": "Be a good husband",
+      "id": 1,
+      "person": 1
+    },
+    {
+      "complete_name": "Mustermann, Max",
+      "description": "Be a good employee",
+      "id": 2,
+      "person": 1
+    },
+    {
+      "complete_name": "Li, Ali",
+      "description": "Be a good investor",
+      "id": 3,
+      "person": 2
+    },
+    {
+      "complete_name": "Mendez, Maria",
+      "description": "Be a good boss",
+      "id": 4,
+      "person": 3
+    },
+    {
+      "complete_name": "Mustermann, Max",
+      "description": "Do test driven development",
+      "id": 5,
+      "person": 1
+    }
+  ],
+  "success": true
+}
 ```
 #### GET '/objectives/<int:objective_id>/requirements'
 - General
     - Returns a set of requirements pertaining to the objective
     - Request arguments: pagination through URL parameters
-- Sample: `curl http://127.0.0.1:5000/questions?page=2`
-```
-```
-
-#### POST '/questions'
-- General
-    - allows to create new question or search existing ones depending on request body
-- Sample 1: `curl --header "Content-Type: application/json" -d '{"question": "what are you?", "answer":"hi", "category":"1", "difficulty":"1"}' -X POST http://127.0.0.1:5000/questions`
+- Sample: `curl http://127.0.0.1:5000/objectives/1/requirements`
 ```
 {
-  "new_question_id": 25, 
-  "success": true, 
-  "total_questions": 19
+  "requirements": [
+    {
+      "description": "Take out trash",
+      "id": 1,
+      "is_met": false,
+      "objective_description": "Be a good husband",
+      "objective_id": 1
+    },
+    {
+      "description": "Buy flowers",
+      "id": 2,
+      "is_met": false,
+      "objective_description": "Be a good husband",
+      "objective_id": 1
+    },
+    {
+      "description": "Say something nice each day",
+      "id": 3,
+      "is_met": false,
+      "objective_description": "Be a good husband",
+      "objective_id": 1
+    }
+  ],
+  "success": true
 }
 ```
 
-#### DELETE '/questions/<int:quesiton_id>'
+#### POST '/objectives'
 - General
-    - Allows to delete an objective by objective ID
-- Sample: `curl -X DELETE http://127.0.0.1:5000/objectives/1` 
+    - allows to create new question or search existing ones depending on request body
+    - Request arguments: json body
+- Sample 1: `curl --header "Content-Type: application/json" --header "Authorization: Bearer <ACCESS_TOKEN>" -d '{'person': 1, 'objective': 'Do test driven development', 'requirements': 'Implement one test'}' -X POST http://127.0.0.1:5000/questions`
+```
+{
+  "n_requirements": 18,
+  "objective_id": 9,
+  "success": true
+}
 ```
 
+#### POST '/objectives/1/requirements'
+- General
+    - allows to create new question or search existing ones depending on request body
+    - Request arguments: json body
+- Sample 1: `curl --header "Content-Type: application/json" --header "Authorization: Bearer <ACCESS_TOKEN>" -d '{'objective_id': 1,  'description': 'Accept new requirements'}' -X POST http://127.0.0.1:5000/objectives/1/requirements`
+```
+{
+  "new_requirement_id": 16,
+  "objective_id": 1,
+  "success": true
+}
+```
+
+#### PATCH '/objectives/1/requirements'
+- General
+    - allows to update the status of a requirement depending on whether it is met or not
+    - Request arguments: json body
+- Sample 1: `curl --header "Content-Type: application/json" --header "Authorization: Bearer <ACCESS_TOKEN>" -d '{'objective_id': 1,  'requirement_id': 1, 'is_met': true}' -X POST http://127.0.0.1:5000/requirements/1`
+```
+{
+  "changed": true,
+  "is_met": true,
+  "previous_status": false,
+  "success": true
+}
+```
+
+#### DELETE '/objectives/<int:objective_id>'
+- General
+    - Allows to delete an objective by objective ID
+- Sample: `curl -X DELETE http://127.0.0.1:5000/objectives/3` 
+
+```
+{
+  "deleted_id": 3,
+  "success": true
+}
+```
+
+#### DELETE '/requirements/<int:requirement_id>'
+- General
+    - Allows to delete a requirement by requirement ID
+    - Request arguments: json body
+- Sample: `curl -X DELETE http://127.0.0.1:5000/requirements/15` 
+
+```
+{
+  "deleted_id": 16,
+  "success": true
+}
 ```
 
 

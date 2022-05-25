@@ -68,7 +68,7 @@ pycodestyle==2.5.0
 pycparser==2.19
 pycryptodome==3.6.6
 Pygments==2.6.1
-PyJWT==1.6.4
+PyJWT==2.4.0
 pylint==2.3.1
 pyparsing==2.4.7
 pytest==5.4.2
